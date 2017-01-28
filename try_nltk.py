@@ -9,6 +9,10 @@ import nltk
 import re
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import word_tokenize,pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+from gensim.models import Word2Vec
+from textblob.classifiers import NaiveBayesClassifier as NBC
+from textblob import TextBlob
 
 noise_list = ['this','is','a','an'];
              
@@ -63,7 +67,7 @@ def lookup_words(input_text):
 obj_standard = lookup_words("RT this is a retweeted tweet by Shivam Bansal")   
 print(obj_standard) 
 
-#POS Tagging
+#POS Tagging    
 def pos_tagging(input_text):
     
     tokens = word_tokenize(input_text)
@@ -83,7 +87,66 @@ def generate_ngram(input_text,n):
 
 output_ngram = generate_ngram('this is a simple text',3) 
 print output_ngram   
+
+#tf-idf
+def tf_idf(input_text):
+    obj = TfidfVectorizer()
+    x = obj.fit_transform(input_text)
+    print x
+    
+tf_idf(['This is sample document.', 'another random document.', 'third sample document text'])   
+
+#Word Embedding
+sentences = [['data', 'science'], ['vidhya', 'science', 'data', 'analytics'],['machine', 'learning'], ['deep', 'learning']]
+model = Word2Vec(sentences, min_count = 1)
+print model.similarity
+print model['learning'] 
+
+
+#Text Classification
+training_corpus = [
+                   ('I am exhausted of this work.', 'Class_B'),
+                   ("I can't cooperate with this", 'Class_B'),
+                   ('He is my badest enemy!', 'Class_B'),
+                   ('My management is poor.', 'Class_B'),
+                   ('I love this burger.', 'Class_A'),
+                   ('This is an brilliant place!', 'Class_A'),
+                   ('I feel very good about these dates.', 'Class_A'),
+                   ('This is my best work.', 'Class_A'),
+                   ("What an awesome view", 'Class_A'),
+                   ('I do not like this dish', 'Class_B')]
+test_corpus = [
+                ("I am not feeling well today.", 'Class_B'), 
+                ("I feel brilliant!", 'Class_A'), 
+                ('Gary is a friend of mine.', 'Class_A'), 
+                ("I can't believe I'm doing this.", 'Class_B'), 
+                ('The date was good.', 'Class_A'), ('I do not enjoy my job', 'Class_B')]
+
+
+model = NBC(training_corpus)
+print(model.classify("Their codes are amazing."))
+print(model.accuracy(test_corpus))
+
+#Text Similarity - Levenshtein Distance
+def levenshtein(s1,s2):
+    if len(s1) > len(s2):
+        s2,s1 = s1,s2
         
+    distances = range(len(s1) + 1)
+    for index2, char2 in enumerate(s2):
+        newDistances = [index2 + 1]
+        for index1, char1 in enumerate(s1):
+            if char1 == char2:
+                newDistances.append(distances[index1])
+            else:
+                newDistances.append(1 + min(distances[index1],distances[index1 + 1],newDistances[-1]))
+    
+    distances = newDistances
+    return distances[-1]
+
+text_sim = levenshtein("analyse","analyze")
+print(text_sim)            
+                    
             
             
 

@@ -51,18 +51,18 @@ tokens[-2]
 
 #Frequency Distribution
 freq_distribution = FreqDist(text1)
-print freq_distribution
+print(freq_distribution)
 freq_distribution.most_common(20)
 freq_distribution["he"]
 
 #Filtering
 V = set(text1)
 long_words = [w for w in V if len(w) >15]
-print long_words
+print(long_words)
 
 fdist5 = FreqDist(text1)
 fdist = [w for w in V if len(w) > 10 and  fdist5[w] > 10]
-print sorted(fdist) 
+print(sorted(fdist))
 
 #Collocation
 text4.collocations()
@@ -71,4 +71,4 @@ text4.collocations()
 set1 = ["call","me","Isabel"]
 for xyz in set1:
     if xyz.endswith("l"):
-        print xyz
+        print(xyz)

@@ -26,7 +26,7 @@ class MyListener(StreamListener):
     
     def on_data(self,data):
         try:
-            with open("E:\\Coursera\\NLP\\trump_feed.json",'a') as f:
+            with open("E:\\Coursera\\NLP\\trump_feed.csv",'a') as f:
                 f.write(data)
                 return True
         except BaseException as e:

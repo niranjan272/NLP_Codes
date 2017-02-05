@@ -7,7 +7,7 @@ Created on Tue Jan 31 15:59:20 2017
 
 import json
 from nltk.tokenize import word_tokenize
-import re
+import re,nltk
 import operator
 from collections import Counter
 from nltk.corpus import stopwords
@@ -55,7 +55,26 @@ with open("E:\\Coursera\\NLP\\trump_feed.json", 'r') as f:
         punctuations = list(string.punctuation)
         stop = stopwords.words('english')+punctuations + ['rt','via']
         term_stop = [term for term in preprocess(tweet['text'])]    
+
+
+with open("E:\\Coursera\\NLP\\trump_feed.csv",'r') as f:
+    for line in f:
+        text = nltk.word_tokenize(line)
+        pos_tag = nltk.pos_tag(text)
+        print(pos_tag)
     
+fp = open("E:\\Coursera\\NLP\\trump_feed.csv","r")
+text = fp.read()
+tokens = nltk.word_tokenize(text)
+text = nltk.Text(tokens)
+text.similar('trump')
+
+
+def process(sentence):
+    for (w1,t1),(w2,t2),(w3,t3) in nltk.trigrams(sentence):
+        if (t1.startswith('V') and t2 == 'ban' and t3.startswith('V')):
+            print(w1,w2,w3)
+
+for sent in text:
+    process(sent.lower()) 
     
- 
- 

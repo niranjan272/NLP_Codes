@@ -6,6 +6,7 @@ Created on Sun Jan 22 18:14:57 2017
 """
 
 import nltk
+from nltk.book import *
 import re
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import word_tokenize,pos_tag
@@ -40,14 +41,14 @@ def remove_regular_exp(input_text,regular_exp):
 
 regular_exp = "#[\w]*"
 text_without_re = remove_regular_exp("Barack Obama was the 44th President of #USA",regular_exp)
-print text_without_re
+print(text_without_re)
 
 
 #Lemmatization
 lem= WordNetLemmatizer()
 word= "Multiplying"
 word_lemmaztization = lem.lemmatize(word,"v")
-print word_lemmaztization
+print(word_lemmaztization)
 
 
 #Object Standardization
@@ -74,7 +75,7 @@ def pos_tagging(input_text):
     return pos_tag(tokens)
 
 text_tagging = pos_tagging("I am learning Natural Language Processing on Analytics Vidhya" )
-print text_tagging
+print(text_tagging)
 
 
 #generate n-gram
@@ -86,21 +87,21 @@ def generate_ngram(input_text,n):
     return output
 
 output_ngram = generate_ngram('this is a simple text',3) 
-print output_ngram   
+print(output_ngram)  
 
 #tf-idf
 def tf_idf(input_text):
     obj = TfidfVectorizer()
     x = obj.fit_transform(input_text)
-    print x
+    print(x)
     
 tf_idf(['This is sample document.', 'another random document.', 'third sample document text'])   
 
 #Word Embedding
 sentences = [['data', 'science'], ['vidhya', 'science', 'data', 'analytics'],['machine', 'learning'], ['deep', 'learning']]
 model = Word2Vec(sentences, min_count = 1)
-print model.similarity
-print model['learning'] 
+print(model.similarity)
+print(model['learning'])
 
 
 #Text Classification
@@ -145,7 +146,13 @@ def levenshtein(s1,s2):
     return distances[-1]
 
 text_sim = levenshtein("analyse","analyze")
-print(text_sim)            
+print(text_sim)  
+
+#text4 analysis
+text4.dispersion_plot(['citizens','democracy','freedom','duties','America'])
+
+
+          
                     
             
             

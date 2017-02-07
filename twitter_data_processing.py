@@ -55,12 +55,16 @@ tweets_data = []
 tweets_file = open("E:\\Coursera\\NLP\\trump_feed.json", 'r') 
 for line in tweets_file:
     #tweet = json.loads(codecs.decode(line,'utf-8'))
-    tweet = simplejson.loads(line)
-    tweets_data.append(tweet)
+    tweet =simplejson.loads(line.replace('\r\n', ''))
+    #tweets_data.append(tweet)
 
 with open("E:\\Coursera\\NLP\\trump_feed.json", 'r') as f:
+    line = f.readlines()
+    line1 = line.read()
+    tweet = json.loads(line1)
+        
     
-
+print(tweet)
     
 tweets = pd.DataFrame()
 tweets["text"] = map(lambda tweet:tweet['text'],tweets_data)

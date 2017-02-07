@@ -5,10 +5,11 @@ Created on Tue Jan 31 14:09:53 2017
 @author: Niranjan
 """
 
-import tweepy
+import tweepy,nltk,re
 from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy.streaming import StreamListener
+from textblob import TextBlob
 
 #API Authentication
 app_key = "StVMHhyoj2Hdk1gOX6fSS9c9G"
@@ -39,3 +40,10 @@ class MyListener(StreamListener):
 twitter_stream = Stream(auth,MyListener())
 twitter_stream.filter(track=['#trump'])       
             
+
+public_tweets = api.search("Trump")
+
+for tweets in public_tweets:
+    print(tweets.text)
+    analysis = TextBlob(tweets.text)
+    print(analysis.sentiment)

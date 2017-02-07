@@ -5,13 +5,17 @@ Created on Tue Jan 31 15:59:20 2017
 @author: Niranjan
 """
 
-import json
+import json,simplejson
 from nltk.tokenize import word_tokenize
 import re,nltk
 import operator
 from collections import Counter
 from nltk.corpus import stopwords
 import string
+import pandas as pd
+import matplotlib.pyplot as plt
+from textblob import TextBlob
+import codecs
 
 emoticons_str = """
     (?:
@@ -47,34 +51,33 @@ def preprocess(s, lowercase=False):
 
 #processing all the tweets
 #Read input file of all text
+tweets_data = []
+tweets_file = open("E:\\Coursera\\NLP\\trump_feed.json", 'r') 
+for line in tweets_file:
+    #tweet = json.loads(codecs.decode(line,'utf-8'))
+    tweet = simplejson.loads(line)
+    tweets_data.append(tweet)
+
 with open("E:\\Coursera\\NLP\\trump_feed.json", 'r') as f:
-    count_all = Counter()
-    for line in f:
-        data = str(line).strip("'<>()[]\"` ").replace('\'', '\"')
-        tweet = json.loads(data)
-        punctuations = list(string.punctuation)
-        stop = stopwords.words('english')+punctuations + ['rt','via']
-        term_stop = [term for term in preprocess(tweet['text'])]    
-
-
-with open("E:\\Coursera\\NLP\\trump_feed.csv",'r') as f:
-    for line in f:
-        text = nltk.word_tokenize(line)
-        pos_tag = nltk.pos_tag(text)
-        print(pos_tag)
     
-fp = open("E:\\Coursera\\NLP\\trump_feed.csv","r")
-text = fp.read()
-tokens = nltk.word_tokenize(text)
-text = nltk.Text(tokens)
-text.similar('trump')
 
-
-def process(sentence):
-    for (w1,t1),(w2,t2),(w3,t3) in nltk.trigrams(sentence):
-        if (t1.startswith('V') and t2 == 'ban' and t3.startswith('V')):
-            print(w1,w2,w3)
-
-for sent in text:
-    process(sent.lower()) 
     
+tweets = pd.DataFrame()
+tweets["text"] = map(lambda tweet:tweet['text'],tweets_data)
+tweets["lang"] = map(lambda tweet:tweet['lang'],tweets_data)
+tweets["country"] = map(lambda tweet:tweet['place']['country'],tweets_data)
+
+tweets_by_country = tweets['country'].value_counts()
+
+fig.ax = plt.subplots()
+ax.tick_params(axis = 'x',labelsize = 15)
+ax.tick_params(axis = 'y',labelsize = 15)
+ax.set_xlable('Country',fontsize = 15)
+ax.set_ylable('No of tweets',fontsize = 15)
+ax.set_title('Top 5 Countries',fontsize = 15, fontweight ='bold')
+tweets_by_country[:10].plot(ax = ax, kind = 'bar',color = 'red')
+plt.show()
+
+
+
+
